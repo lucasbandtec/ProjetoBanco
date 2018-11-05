@@ -1,7 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var sql = require('mssql');
-var config = require('../config');
+
 
 //--------------------------------------------------------------------------------
 
@@ -9,17 +8,14 @@ var config = require('../config');
 router.get('/', function (req, res) {
     
     // Faz a conexão com o banco passando a configuração
-    sql.connect(config).then(() => {
-        //Faz a consulta na tabela incubadora om o comando sql que quiser
-        return sql.query(`select * from incubadora`)
-    }).then(resultado => {
+    global.conn.request().query`select * from incubadora`
+    .then(resultado => {
         //Aqui temos o resultado da consulta e mandamos pra view lista
-        sql.close()
+        
         res.render('incubadoras/lista', { incubadoras: resultado.recordset });
 
     }).catch(err => {
         // Se der algum erro imprime no console
-        sql.close()
         console.log(err);
     })
 });
@@ -43,24 +39,41 @@ router.post('/cadastro', function (req, res) {
 
     // Faz a conexão com o banco passando a configuração 
     //esse THEN quer dizer que se caso a  conexao der certo ele roda o código seguinte.
-    sql.connect(config).then(() => {
+    global.conn.request().query`insert into incubadora values(${codigo},${status})`
 
-        // Se a conexão der certo ele roda aqui
-        //Faz a consulta na tabela incubadora. Esses campos assim ${ } são pra concatenar as variaveis.
-        return sql.query`insert into incubadora values(${codigo},${status})`
-
-    }).then(resultado => {
+    then(resultado => {
         //Aqui temos o resultado da query e redirecionamos para a view de lista
-        sql.close()
+        
         res.redirect('/incubadoras');
 
     }).catch(err => {
         // Se der algum erro imprime no console
-        sql.close()
+        
         console.log(err);
     })
 
 });
+    
+router.get('/details/:id', function (req, res, next) {
+
+    let id = req.params.id;
+
+    //faz a conexao global com o banco
+    global.conn.request().query`select * from incubadora where idIncubadora = ${id}`
+  
+    .then(resultado => {
+
+        //Manda pra view details 
+      res.render('incubadoras/details', { incubadora: resultado.recordset[0]});
+      console.log( resultado.recordset[0])
+  
+    }).catch(err => {
+      // Se der algum erro imprime no console
+      console.log(err);
+    })
+  
+   
+  });
 //-----------------------------------------------------------------------------------------------------
 
 module.exports = router;
