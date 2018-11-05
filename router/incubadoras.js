@@ -41,7 +41,7 @@ router.post('/cadastro', function (req, res) {
     //esse THEN quer dizer que se caso a  conexao der certo ele roda o código seguinte.
     global.conn.request().query`insert into incubadora values(${codigo},${status})`
 
-    then(resultado => {
+    .then(resultado => {
         //Aqui temos o resultado da query e redirecionamos para a view de lista
         
         res.redirect('/incubadoras');
@@ -53,7 +53,7 @@ router.post('/cadastro', function (req, res) {
     })
 
 });
-    
+//-----------------------------------------------------------------------------------
 router.get('/details/:id', function (req, res, next) {
 
     let id = req.params.id;
@@ -75,6 +75,47 @@ router.get('/details/:id', function (req, res, next) {
    
   });
 //-----------------------------------------------------------------------------------------------------
+router.get('/delete/:id', (req,res) =>{
+
+    let id = req.params.id;
+  
+    global.conn.request().query`delete from incubadora where idIncubadora = ${id}`
+  
+    .then(resultado => {
+  
+      res.redirect('/incubadoras/');
+      
+  
+    }).catch(err => {
+      // Se der algum erro imprime no console
+      console.log(err);
+    })
+  
+    });
+  
+  
+  
+  //-----------------------------------------------------------------------------------
+  //GET obtem medicao da incubadora
+  
+  router.get('/medicao/:id', (req, res, next) => {
+
+    let id = req.params.id;
+  
+    global.conn.request().query`select Max(idMedicao), temperatura, umidade from medicao where fkIncubadora = ${id} group by idMedicao, temperatura, umidade`
+    
+    .then(resultado => {
+  
+      res.json(resultado.recordset[0]);
+  
+    }).catch(err => {
+      // Se der algum erro imprime no console
+      console.log(err);
+    })
+  
+  });
+  
+  //
 
 module.exports = router;
 

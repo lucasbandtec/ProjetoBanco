@@ -1,7 +1,7 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var path = require('path');
-var sql = require('mssql');
+const sql = require('mssql');
 var config = require('./config');
 
 //Aqui incializa o express e salva na variável app
