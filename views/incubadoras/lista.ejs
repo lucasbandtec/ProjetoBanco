@@ -1,56 +1,83 @@
-
-
+<!-- Inclui o layout do cabeçário-->
 <%- include('../headerLayout.ejs')%>
 
-    <div class="container">
-       
-<p> <a href="/incubadoras/cadastro"> Adicionar Nova Incubadora</a> </p>           
-<div class="row">
-    <!-- Aqui é feito o loop e vai listando as incubadoras 
-    esse tipo de loop é um for especial, se tiver 10 incubadoras ele gira 10 vezes automatimente-->
-    <% for(data of incubadoras){ %>
-
-        <div class="col-lg-4 col-md-6 mb-4">
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">Incubadora</h4>      
-                    <p class="card-text">                 
-                      
-                        <label>Código:</label>
-                        <b><%= data.codIncubadora %></b>
-                        <br />
-
-                        <label>Status:</label>
-                        <% if(data.status == 1){%>
-                            <b>Em uso</b>
-                            <br />
-
-                             <label>Identificação Recém Nascido:</label>
-                            12345
-                            <br />
-                            <label>Nome Recém Nascido:</label>
-                        <%} else{%>
-                            <b>vazia</b>
-                        <%}%>
-
-                    </p>
-                </div>
-                <div class="card-footer">
-                    <form action="/incubadoras/details/<%= data.idIncubadora %>" method="GET">
-                        <button type="submit" class="btn btn-info">Verificar</button>
-                    </form>
-                   
+<div class="fixed-action-btn">
+    <a class="btn-floating btn-large waves-effect waves-light azul" data-toggle="modal" data-target="#exampleModalCenter">
+      <i class="large material-icons">+</i>
+    </a>
+  </div>
+  <!-- Modal Structure -->
+  <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Nova Incubadora</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <form action="/incubadoras/create" method="POST">
+                <div class="form-group">
+                    <label for="desc">Descrição:</label>
+                    <input type="text" name="desc">
                 </div>
                 
-            </div>
         </div>
-
-
-    <% } %>
-</div>
-
- 
-            
+        <div class="modal-footer">
+          <button type="button" class="btn waves-effect waves-light azul" data-dismiss="modal">Fechar</button>
+            <button type="submit" class="btn waves-effect waves-light azul ">Cadastrar</button>
+            </form>
+        </div>
+      </div>
     </div>
-    
-<%- include('../footerLayout.ejs')%>
+  </div>
+
+    <div class="row">
+        <!-- Aqui é feito o loop e vai listando as incubadoras-->
+        <% for(data of incubadoras){ %>
+
+            <div class="col-lg-4 col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Incubadora
+                            <span class="float-right">
+                                <%= data.idIncubadora %>
+                            </span>
+                        </h4>
+                        <p class="card-text">
+                            <form action="/incubadoras/details/<%= data.idIncubadora %>" method="GET">
+                                <label>Descrição:</label>
+                                <%= data.descIncubadora %>
+                                    <br />
+
+
+                                    <label>Status:</label>
+                                    <% if(data.status == 1){%>
+                                        <b>Em uso</b>
+                                        <br />
+
+                                        <label>Identificação Recém Nascido:</label>
+                                        12345
+                                        <br />
+                                        <label>Nome Recém Nascido:</label>
+                                        <%} else{%>
+                                            <b>vazia</b>
+                                            <%}%>
+                                                <button type="submit" class="btn waves-effect waves-light azul float-right">Detalhes ></button>
+                            </form>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+
+            <% } %>
+    </div>
+
+    <script>
+        $('#incubadoras').addClass('active');
+    </script>
+
+    <!-- Inclui o layout de rodapé-->
+    <%- include('../footerLayout.ejs')%>

@@ -96,26 +96,8 @@ router.get('/delete/:id', (req,res) =>{
   
   
   //-----------------------------------------------------------------------------------
-  //GET obtem medicao da incubadora
   
-  router.get('/medicao/:id', (req, res, next) => {
-
-    let id = req.params.id;
   
-    global.conn.request().query`select Max(idMedicao), temperatura, umidade from medicao where fkIncubadora = ${id} group by idMedicao, temperatura, umidade`
-    
-    .then(resultado => {
-  
-      res.json(resultado.recordset[0]);
-  
-    }).catch(err => {
-      // Se der algum erro imprime no console
-      console.log(err);
-    })
-  
-  });
-  
-  //
 
 module.exports = router;
 

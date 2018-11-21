@@ -15,9 +15,9 @@ var config = require('../config')
 
  //faz a conecçao global do banco
 sql.connect(config)
-  .then(conn => {
+    .then(conn => {
 
-    global.conn = conn
+      global.conn = conn
 
     console.log('Conectado');
     var port = normalizePort(process.env.PORT || '3000');

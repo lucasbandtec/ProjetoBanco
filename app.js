@@ -18,10 +18,13 @@ app.use(express.static ('./public'));
 
 // Faz o arquivo routes ficar disponível
 var indexRouter = require('./router/index');
-app.use('/',indexRouter);
+var incubadorasRouter = require('./router/incubadoras');
+var medicaoRouter = require('./router/medicao');
 
-var incubadorasRouter= require('./router/incubadoras');
+
+app.use('/',indexRouter);
 app.use('/incubadoras', incubadorasRouter);
+app.use('/medicao', medicaoRouter);
 
 //Define que o servidor vai rodar no localhost:3000
 
