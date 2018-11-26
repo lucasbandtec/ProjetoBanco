@@ -17,13 +17,16 @@ var indexRouter = require('./router/index');
 var usersRouter = require('./router/users');
 var incubadorasRouter = require('./router/incubadoras');
 var medicaoRouter = require('./router/medicao');
+var recemNasc = require('./router/recemNasc');
+var internacao = require('./routes/internacao');
 
 
 //----------------------------------------------------------
 
 //Aqui incializa o express e salva na variável app
 const app = express();
-
+//deixa as dependencias mais rapidas
+app.use(cors());
 //----------------------------------------------------------
 
 app.use(session({
