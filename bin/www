@@ -7,8 +7,9 @@
 var app = require('../app');
 var debug = require('debug')('backend-node:server');
 var http = require('http');
+var config = require('../config');
 var sql = require('mssql');
-var config = require('../config')
+
 /**
  * Get port from environment and store in Express.
  */

@@ -1,6 +1,22 @@
 var express = require('express');
 var router = express.Router();
+var ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn;
 
+
+//---------------------------------------------------------------------------
+// verifica se o usuario esta logado
+router.get('/', ensureLoggedIn('/login?fail=true'), function (req, res) {
+
+  
+    global.conn.request().query`select * from incubadora`
+    .then(result => {
+         res.render('incubadoras/lista', { incubadoras: result.recordset });    
+     }).catch(err => {
+         console.dir(err);
+    })
+  
+  
+  });
 
 //--------------------------------------------------------------------------------
 

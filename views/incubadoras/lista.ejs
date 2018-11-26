@@ -1,6 +1,7 @@
 <!-- Inclui o layout do cabeçário-->
 <%- include('../headerLayout.ejs')%>
 
+    <!-- BOTÃO E MODAL - ADICIONAR INCUBADORA: -->
 <div class="fixed-action-btn">
     <a class="btn-floating btn-large waves-effect waves-light azul" data-toggle="modal" data-target="#exampleModalCenter">
       <i class="large material-icons">+</i>
@@ -17,7 +18,7 @@
           </button>
         </div>
         <div class="modal-body">
-            <form action="/incubadoras/create" method="POST">
+            <form action="/incubadoras/cadastro" method="POST">
                 <div class="form-group">
                     <label for="desc">Descrição:</label>
                     <input type="text" name="desc">
