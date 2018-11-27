@@ -11,6 +11,21 @@ body {
 .card .card-body h4 {
   margin: 0; }
 
+.inputCalendarDay{
+  width: 100px !important;
+  
+}
+.inputCalendarWeek{
+  width: 30px !important;
+  
+}
+
+.ui-datepicker-trigger {
+  width: 30px}
+  .datepicker-orient-top {
+    top: auto !important
+  }
+
 .azul {
   background-color: #68cbcc !important; }
 
@@ -486,7 +501,6 @@ img {
 
 .btn,
 button,
-input,
 textarea {
   -webkit-box-shadow: none;
           box-shadow: none;
