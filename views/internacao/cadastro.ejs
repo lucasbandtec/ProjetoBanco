@@ -1,0 +1,47 @@
+<!-- Inclui o layout do cabeçário-->
+<%- include('../headerLayout.ejs')%>
+
+    
+   
+
+    <div class="row">
+        <!-- Aqui é feito o loop e vai listando as incubadoras-->
+        <% for(data of incubadoras){ %>
+
+            <div class="col-lg-4 col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Incubadora
+                            <span class="float-right">
+                                <%= data.idIncubadora %>
+                            </span>
+                        </h4>
+                        <p class="card-text">
+                            <form action="/recemNasc/internar/<%= data.idIncubadora %>" method="GET">
+                                <input type="text" name="idRecemNasc" value="<%= idRecemNasc %>" style="display: none">
+                                <label>Descrição:</label>
+                                <%= data.descIncubadora %>
+                                    <br />
+
+
+                                    <label>Status:</label>
+                                    
+                                            <b>vazia</b>
+                                            
+                                    <button type="submit" class="btn waves-effect waves-light azul float-right">Selecionar</button>
+                            </form>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+
+            <% } %>
+    </div>
+
+    <script>
+        $('#').addClass('active');
+    </script>
+
+    <!-- Inclui o layout de rodapé-->
+    <%- include('../footerLayout.ejs')%>

@@ -5,6 +5,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser')
 var passport = require('passport')
 var session = require('express-session');
+var cors = require('cors');
 
 //----------------------------------------------------------
 //passport é a dependencia que faz autenticacao
@@ -17,8 +18,8 @@ var indexRouter = require('./router/index');
 var usersRouter = require('./router/users');
 var incubadorasRouter = require('./router/incubadoras');
 var medicaoRouter = require('./router/medicao');
-var recemNasc = require('./router/recemNasc');
-var internacao = require('./routes/internacao');
+var recemNascRouter = require('./router/recemNasc');
+var internacaoRouter = require('./router/internacao');
 
 
 //----------------------------------------------------------
@@ -62,6 +63,8 @@ app.use('/',indexRouter);
 app.use('/users', usersRouter);
 app.use('/incubadoras', incubadorasRouter);
 app.use('/medicao', medicaoRouter);
+app.use('/recemNasc', recemNascRouter);
+app.use('/internacao', internacaoRouter);
 //----------------------------------------------------------
 // Para caso der erro
 app.use(function (err, req, res, next) {

@@ -2,37 +2,37 @@
 <%- include('../headerLayout.ejs')%>
 
     <!-- BOTÃO E MODAL - ADICIONAR INCUBADORA: -->
-<div class="fixed-action-btn">
-    <a class="btn-floating btn-large waves-effect waves-light azul" data-toggle="modal" data-target="#exampleModalCenter">
-      <i class="large material-icons">+</i>
-    </a>
-  </div>
-  <!-- Modal Structure -->
-  <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLongTitle">Nova Incubadora</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-            <form action="/incubadoras/cadastro" method="POST">
-                <div class="form-group">
-                    <label for="desc">Descrição:</label>
-                    <input type="text" name="desc">
-                </div>
-                
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn waves-effect waves-light azul" data-dismiss="modal">Fechar</button>
-            <button type="submit" class="btn waves-effect waves-light azul ">Cadastrar</button>
-            </form>
-        </div>
-      </div>
+    <div style="margin-bottom: 50px;" class="fixed-action-btn">
+        <a class="btn-floating btn-large waves-effect waves-light azul" title="Nova Incubadora" data-toggle="modal" data-target="#exampleModalCenter">
+            <i style="font-style: normal;" class="large material-icons">+</i>
+        </a>
     </div>
-  </div>
+    <!-- Modal Structure -->
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Nova Incubadora</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="/incubadoras/cadastro" method="POST">
+                        <div class="form-group">
+                            <label for="desc">Descrição:</label>
+                            <input type="text" name="desc">
+                        </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn waves-effect waves-light azul ">Cadastrar</button>
+                    <button type="button" class="btn waves-effect waves-light azul" data-dismiss="modal">Fechar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="row">
         <!-- Aqui é feito o loop e vai listando as incubadoras-->
@@ -55,13 +55,13 @@
 
                                     <label>Status:</label>
                                     <% if(data.status == 1){%>
-                                        <b>Em uso</b>
+                                        <b>em uso</b>
                                         <br />
 
                                         <label>Identificação Recém Nascido:</label>
                                         12345
                                         <br />
-                                        <label>Nome Recém Nascido:</label>
+                                       
                                         <%} else{%>
                                             <b>vazia</b>
                                             <%}%>

@@ -1,0 +1,183 @@
+<script>
+
+    var context = document.getElementById("chart").getContext("2d");
+    context.canvas.width = 1000;
+    context.canvas.height = 500;
+
+    var configuration = {
+        type: 'line',
+        data: {
+            datasets: [{
+                borderWidth: 5,
+                label: "Temperatura",
+                pointStyle: "rectRounded",
+                type: 'line',
+                borderColor: 'rgb(249, 59, 59)',
+                pointBackgroundColor: 'rgb(249, 59, 59)',
+                fill: false
+            }]
+        },
+        options: {
+            legend: {
+                display: false
+            },
+            scales: {
+                xAxes: [{
+                    //type: 'value',
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Tempo da coleta',
+                        fontColor: "#424242"
+                    },
+                    distribution: 'series',
+                    ticks: {
+                        beginAtZero: true,
+                        fontColor: "#424242"
+                    },
+                    gridLines: {
+                        borderDash: [10, 4]
+                    }
+                }],
+                yAxes: [{
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Temperatura em °C',
+                        fontColor: "#424242"
+                    },
+                    ticks: {
+                        beginAtZero: true,
+                        fontColor: "#424242"
+                    },
+                    gridLines: {
+                        borderDash: [10, 4]
+                    }
+                }]
+            },
+            animation: {
+                duration: 0
+            }
+        }
+    };
+
+    var chart = new Chart(context, configuration);
+
+    var date = 0;
+    var randomTemp = Math.random() * 5;
+    // var randomUmid = Math.random() * 5;
+
+    // CHART UMIDADE:
+
+    var contextU = document.getElementById("chartU").getContext("2d");
+    contextU.canvas.width = 1000;
+    contextU.canvas.height = 500;
+
+    var configurationU = {
+        type: 'line',
+        data: {
+            datasets: [{
+                borderWidth: 5,
+                label: "Umidade",
+                type: 'line',
+                pointStyle: "rectRounded",
+                borderColor: '#2DA8AB',
+                pointBackgroundColor: '#2DA8AB',
+                fill: false
+            }]
+        },
+        options: {
+            legend: {
+                display: false
+            },
+            scales: {
+                xAxes: [{
+                    //type: 'value',
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Tempo da coleta',
+                        fontColor: "#424242"
+                    },
+                    distribution: 'series',
+                    ticks: {
+                        beginAtZero: true,
+                        fontColor: "#424242"
+                    },
+                    gridLines: {
+                        borderDash: [10, 4]
+                    }
+                }],
+                yAxes: [{
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Umidade em %'
+                    },
+                    ticks: {
+                        beginAtZero: true,
+                        fontColor: "#424242"
+                    },
+                    gridLines: {
+                        borderDash: [10, 4]
+                    }
+                }]
+            },
+            animation: {
+                duration: 0
+            }
+        }
+    };
+
+    var chartU = new Chart(contextU, configurationU);
+    var timeU = 0;
+    var randomUmid = Math.random() * 5;
+
+
+
+    //Obtem as medições
+    function get_data() {
+
+        fetch('/medicao').then(function (response) {
+
+            response.json().then(function (data) {
+
+                if (chart.data.labels.length == 9 && chart.data.datasets[0].data.length == 9) {
+                    chart.data.labels.shift();
+                    chartU.data.labels.shift();
+                    chart.data.datasets[0].data.shift();
+                    chartU.data.datasets[0].data.shift();
+                }
+                
+                 chart.data.labels.push(data.time);
+                chartU.data.labels.push(data.time);
+                
+
+                
+                let barTemp = new ldBar('#temperatura');
+                let barUmid = new ldBar('#umidade');
+
+                barTemp.set(data.temperatura);
+                barUmid.set(data.umidade);
+
+
+                chart.data.datasets[0].data.push(parseFloat(data.temperatura));
+                chartU.data.datasets[0].data.push(parseFloat(data.umidade));
+
+                chart.update();
+                chartU.update();
+
+            });
+        }).catch(function (err) {
+            console.log(err);
+        });
+
+
+
+    }
+
+        get_data();
+    
+
+    setInterval(() => {			
+        get_data();
+    }, 3000);
+
+
+</script>

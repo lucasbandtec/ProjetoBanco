@@ -7,18 +7,21 @@
 			content: "ºC";
 		}
 	</style>
+	
 
 	<!-- DADOS EM TEMPO REAL -->
 	<div class="row">
-		<div class="col-lg-6 col-md-6 mb-12 text-center">
+		<div class="col-lg-6 col-md-6 col-sm-6 col-6 mb-12 text-center">
 			<div id="temperatura" data-max="50" data-type="fill" data-img="/images/termometro.png" class="ldBar"  data-img-size="100,100"></div>			
 		</div>
-		<div class="col-lg-6 col-md-6 mb-12 text-center">
+		<div class="col-lg-6 col-md- col-sm-6 col-6 mb-12 text-center">
 			<div id="umidade" data-type="fill" data-img="/images/water.png" class="ldBar"  data-img-size="100,100"></div>
 		</div>
 	</div>
 
 	<br>
+
+	
 
 	<!-- TABELAS: -->
 	<div class="row">
@@ -40,8 +43,29 @@
 			</div>
 		</div>
 	</div>
+
+	<!--Calendários-->
 	<div class="row">
-		<div class="col-lg-6 col-md-6 mb-12">
+		<!--Diário-->
+		<div class="col-lg-4 col-md-4 mb-12">
+			<label for="dia">Por dia:</label>
+			<input class="inputCalendarDay" type="text" id="dia" name="dia">
+		</div>
+
+		<div class="col-lg-4 col-md-4 mb-12">
+			<label for="semana">Por Semana:</label>
+			<input class="inputCalendarWeek" type="text" id="semana" name="semana">
+		</div>
+		<div class="col-lg-4 col-md-4 mb-12" >
+			<label for="mes">Por Mes:</label>
+			<input class="inputCalendarDay"  type="text" id="mes" name="mes">
+		</div>
+		
+	</div>
+	
+
+	<div class="row">
+		<div class="col-lg-6 col-md-6 col-sm-6 col-6 mb-12">
 			<label for="">Temperatura Média </label>
 			<p id= "mediaTemp"></p>
 
@@ -58,7 +82,7 @@
 			<p id= "maxTemp"></p>
 		</div>
 
-		<div class="col-lg-6 col-md-6 mb-12">
+		<div class="col-lg-6 col-md-6 col-sm-6 col-6 mb-12">
 			<label for="">Umidade Média</label>
 			<p id="mediaUmid"></p>
 
@@ -81,214 +105,12 @@
 	<div>
 		<a class="btn waves-effect waves-light red" href="/incubadoras/delete/<%= incubadora.idIncubadora%>">Deletar Incubadora</a>
 	</div>
-	<script>
+	
+	<!--Inclui código do ChartJs para gráficos-->
+	<%- include('./graficos.ejs')%>
 
-		var context = document.getElementById("chart").getContext("2d");
-		context.canvas.width = 1000;
-		context.canvas.height = 500;
-
-		var configuration = {
-			type: 'line',
-			data: {
-				datasets: [{
-					borderWidth: 5,
-					label: "Temperatura",
-					pointStyle: "rectRounded",
-					type: 'line',
-					borderColor: 'rgb(249, 59, 59)',
-					pointBackgroundColor: 'rgb(249, 59, 59)',
-					fill: false
-				}]
-			},
-			options: {
-				legend: {
-					display: false
-				},
-				scales: {
-					xAxes: [{
-						//type: 'value',
-						scaleLabel: {
-							display: true,
-							labelString: 'Segundos',
-							fontColor: "#424242"
-						},
-						distribution: 'series',
-						ticks: {
-							beginAtZero: true,
-							fontColor: "#424242"
-						},
-						gridLines: {
-							borderDash: [10, 4]
-						}
-					}],
-					yAxes: [{
-						scaleLabel: {
-							display: true,
-							labelString: 'Temperatura em °C',
-							fontColor: "#424242"
-						},
-						ticks: {
-							beginAtZero: true,
-							fontColor: "#424242"
-						},
-						gridLines: {
-							borderDash: [10, 4]
-						}
-					}]
-				},
-				animation: {
-					duration: 0
-				}
-			}
-		};
-
-		var chart = new Chart(context, configuration);
-
-		var time = 0;
-		var randomTemp = Math.random() * 5;
-		// var randomUmid = Math.random() * 5;
-
-		// CHART UMIDADE:
-
-		var contextU = document.getElementById("chartU").getContext("2d");
-		contextU.canvas.width = 1000;
-		contextU.canvas.height = 500;
-
-		var configurationU = {
-			type: 'line',
-			data: {
-				datasets: [{
-					borderWidth: 5,
-					label: "Umidade",
-					type: 'line',
-					pointStyle: "rectRounded",
-					borderColor: '#2DA8AB',
-					pointBackgroundColor: '#2DA8AB',
-					fill: false
-				}]
-			},
-			options: {
-				legend: {
-					display: false
-				},
-				scales: {
-					xAxes: [{
-						//type: 'value',
-						scaleLabel: {
-							display: true,
-							labelString: 'Segundos',
-							fontColor: "#424242"
-						},
-						distribution: 'series',
-						ticks: {
-							beginAtZero: true,
-							fontColor: "#424242"
-						},
-						gridLines: {
-							borderDash: [10, 4]
-						}
-					}],
-					yAxes: [{
-						scaleLabel: {
-							display: true,
-							labelString: 'Umidade em %'
-						},
-						ticks: {
-							beginAtZero: true,
-							fontColor: "#424242"
-						},
-						gridLines: {
-							borderDash: [10, 4]
-						}
-					}]
-				},
-				animation: {
-					duration: 0
-				}
-			}
-		};
-
-		var chartU = new Chart(contextU, configurationU);
-		var timeU = 0;
-		var randomUmid = Math.random() * 5;
-
-
-
-		//Obtem as medições
-		function get_data() {
-
-			fetch('/medicao').then(function (response) {
-
-				response.json().then(function (data) {
-
-					if (chart.data.labels.length == 10 && chart.data.datasets[0].data.length == 10) {
-						chart.data.labels.shift();
-						chartU.data.labels.shift();
-						chart.data.datasets[0].data.shift();
-						chartU.data.datasets[0].data.shift();
-					}
-
-					chart.data.labels.push(time++);
-					chartU.data.labels.push(timeU++);
-
-
-					
-					let barTemp = new ldBar('#temperatura');
-				    let barUmid = new ldBar('#umidade');
-
-					barTemp.set(data.temperatura + randomTemp);
-					barUmid.set(data.umidade + randomUmid);
-
-
-					chart.data.datasets[0].data.push(parseFloat(data.temperatura + randomTemp));
-					chartU.data.datasets[0].data.push(parseFloat(data.umidade + randomUmid));
-
-					chart.update();
-					chartU.update();
-
-				});
-			}).catch(function (err) {
-				console.error('Failed retrieving information', err);
-			});
-
-
-
-		}
-
-		//Obtem as estatisticas
-		function get_estatistica(){
-			
-			fetch('/medicao/estatistica').then(function (response) {
-
-				response.json().then(function (data) {
-
-					document.getElementById('mediaTemp').innerHTML = data.mediaTemp;
-					document.getElementById('medianaTemp').innerHTML = data.medianaTemp;
-					document.getElementById('dvPdTemp').innerHTML = data.dvPdTemp;
-					document.getElementById('minTemp').innerHTML = data.minTemp;
-					document.getElementById('maxTemp').innerHTML = data.maxTemp;
-
-					document.getElementById('mediaUmid').innerHTML = data.mediaUmid;
-					document.getElementById('medianaUmid').innerHTML = data.medianaUmid;
-					document.getElementById('dvPdUmid').innerHTML = data.dvPdUmid;
-					document.getElementById('minUmid').innerHTML = data.minUmid;
-					document.getElementById('maxUmid').innerHTML = data.maxUmid;
-				});
-			}).catch(function (err) {
-				console.error('Failed retrieving information', err);
-			});
-		}
-
-		get_data();
-		get_estatistica();
-
-		setInterval(() => {
-			get_estatistica();
-			get_data();
-		}, 5000);
-
-	</script>
-
+	 <!--Inclui código de estatisticas e calendário-->
+	<%- include('./estatisticas.ejs')%>
 
 	<!-- Inclui o layout de rodapé-->
 	<%- include('../footerLayout.ejs')%>

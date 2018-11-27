@@ -1,11 +1,13 @@
 var express = require('express');
 var router = express.Router();
+//A Dependencia stats é para fazer statistica(fazer max,min,media,mediana etc)
+var stats = require('stats-lite');
 
 //GET obtem medicao da incubadora
-
+//------------------------------------------------------------------------------------------------------------
 router.get('/', (req, res, next) => {
 
-    global.conn.request().query`select Top(1) temperatura, umidade from medicao order by idMedicao desc;`
+  global.conn.request().query`select Top(1) temperatura, umidade, CONVERT (varchar(10), dataMed) as date, CONVERT (varchar(10), timeMed,108) as time from medicao order by idMedicao desc;`
     
     .then(resultado => {
         
@@ -17,22 +19,138 @@ router.get('/', (req, res, next) => {
     })
   
   });
+
+// Obtem estatisticas do dia selecionado
+//---------------------------------------------------------------------------------------------------------
+router.post('/estatisticaDia/:id', (req, res, next) => {
   
-//GET obtem medicao da incubadora e faz estatistica
+  let id = req.params.id
 
-router.get('/estatistica', (req, res, next) => {
+  let date = req.body.dia;
 
-    global.conn.request().query`select top(1) * from estatistica order by idEstatistica desc;`
-    
+
+
+  global.conn.request().query`select  temperatura, umidade from medicao where dataMed = ${date} and fkIncubadora = ${id};`
+  
+  .then(resultado => {
+
+
+    let temperatura = [];
+    let umidade = [];
+
+    for (data of resultado.recordset) {
+
+      temperatura.push(data.temperatura);
+      umidade.push(data.umidade);
+    }
+
+   let estatistica =  getEstatistica(temperatura, umidade);
+       
+   res.json(estatistica);
+
+  }).catch(err => {
+    // Se der algum erro imprime no console
+    console.log(err);
+  })
+
+});
+
+// Obtem estatisticas da semana selecionada
+//---------------------------------------------------------------------------------------------------------
+
+router.post('/estatisticaSemana/:id', (req, res, next) => {
+
+  let id = req.params.id
+  let semana = req.body.semana;
+
+  global.conn.request().query`select temperatura, umidade from medicao where DATEPART(WEEK,dataMed) = ${semana} and fkIncubadora = ${id};`
+
     .then(resultado => {
-         
-     res.json(resultado.recordset[0]);
-  
+
+
+      let temperatura = [];
+      let umidade = [];
+
+      for (data of resultado.recordset) {
+
+        temperatura.push(data.temperatura);
+        umidade.push(data.umidade);
+      }
+
+      let estatistica = getEstatistica(temperatura, umidade);
+
+      res.json(estatistica);
+
     }).catch(err => {
       // Se der algum erro imprime no console
       console.log(err);
     })
-  
-  });
-  
-    module.exports = router;
+
+});
+
+
+// Obtem estatisticas do mes selecionado
+//---------------------------------------------------------------------------------------------------------
+
+router.post('/estatisticaMes/:id', (req, res, next) => {
+
+  let id = req.params.id
+  let mes = req.body.mes;
+
+  global.conn.request().query`select temperatura, umidade from medicao where DATEPART(MONTH,dataMed) = DATEPART(MONTH,${mes}) and fkIncubadora = ${id};`
+
+    .then(resultado => {
+
+
+      let temperatura = [];
+      let umidade = [];
+
+      for (data of resultado.recordset) {
+
+        temperatura.push(data.temperatura);
+        umidade.push(data.umidade);
+      }
+
+      let estatistica = getEstatistica(temperatura, umidade);
+
+      res.json(estatistica);
+
+    }).catch(err => {
+      // Se der algum erro imprime no console
+      console.log(err);
+    })
+
+});
+
+
+// Aqui é realizado o cálculos de estatisticas
+//----------------------------------------------------------------------------
+function getEstatistica(temperatura, umidade) {
+
+
+      let estatisticas = {
+        //Estatisticas temperatura
+        mediaTemp: parseInt(stats.mean(temperatura)),
+        medianaTemp: parseInt(stats.median(temperatura)),
+        dvPdTemp: parseInt(stats.stdev(temperatura)),
+        q1Temp: parseInt(stats.percentile(temperatura, 0.25)),
+        q3Temp: parseInt(stats.percentile(temperatura, 0.75)),
+        minTemp: Math.min(...temperatura),
+        maxTemp: Math.max(...temperatura),
+
+        //Estatisticas umidade
+        mediaUmid: parseInt(stats.mean(umidade)),
+        medianaUmid: parseInt(stats.median(umidade)),
+        dvPdUmid: parseInt(stats.stdev(umidade)),
+        q1Umid: parseInt(stats.percentile(umidade, 0.25)),
+        q3Umid: parseInt(stats.percentile(umidade, 0.75)),
+        minUmid: Math.min(...umidade),
+        maxUmid: Math.max(...umidade)
+      };
+
+      return estatisticas;
+
+};
+
+
+  module.exports = router;

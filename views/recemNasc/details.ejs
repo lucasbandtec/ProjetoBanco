@@ -1,0 +1,43 @@
+<!-- Inclui o layout do cabeçário-->
+<%- include('../headerLayout.ejs')%>
+
+<h4>Detalhes de Recém-Nascido</h4>
+<hr>
+<br>  
+	
+
+	<div class="row">
+		<div class="col-lg-6 col-md-6 col-sm-6 col-6 mb-12">
+			<label for="">DN:</label>
+			<p><%=data.idRecemNasc%></p>
+
+			<label for="">Nome:</label>
+			<p ><%=data.nome%></p>
+
+			<label for="">Sexo:</label>
+			<p><%=data.sexo%></p>
+
+			<label for="">Data de Nascimento</label>
+			<p ><%=data.date%></p>
+
+			<label for="">Hora de Nascimento</label>
+            <p><%=data.time%></p>
+            
+            <label for="">Nome da Mãe</label>
+            <p><%=data.nomeMae%></p>
+
+            <label for="">Nome da Pai</label>
+            <p><%=data.nomePai%></p>
+            
+		</div>
+		
+		
+	</div>
+
+	<div>
+		<a class="btn waves-effect waves-light red" href="/recemNasc/internacao/<%= data.idRecemNasc%>">Internar</a>
+	</div>
+	
+
+	<!-- Inclui o layout de rodapé-->
+	<%- include('../footerLayout.ejs')%>

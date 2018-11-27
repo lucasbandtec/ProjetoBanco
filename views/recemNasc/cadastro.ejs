@@ -1,0 +1,131 @@
+
+
+
+
+<%- include('../headerLayout.ejs')%>
+
+<div class="row">
+    <div class="col-md-4">
+    <h4>Cadastro de Recém-Nascidos</h4>
+    <hr>
+    <br>    
+    <form id="form" >
+            
+             <div>
+                <span style="color : blue" id="msg"></span>
+           </div>
+          
+         
+        <div class="form-group">
+            <label for="nome">Nome:</label>
+            <input id="nome" type="text" name="nome">
+        </div>
+        <div class="form-group">
+                <label for="group1">Sexo:</label>
+            
+                <label>
+                  <input name="group1" type="radio" checked value="f"/>
+                  <span>F</span>
+                </label>
+              
+              
+                <label>
+                  <input name="group1" type="radio" value="m"/>
+                  <span>M</span>
+                </label>
+              
+        </div>
+        <div class="form-group"> 
+            <label for="date">Data Nascimento:</label>
+            <input id="dateNasc" type="date" name="date" value="2018-11-26">           
+        </div>
+        <div class="form-group"> 
+                <label for="time">Hora Nascimento:</label>
+                <input id="timeNasc" type="time" name="time" value="00:00">           
+        </div>
+        <div class="form-group"> 
+                <label for="nomeMae">Nome do Mãe:</label>
+                <input id="nomeMae" type="text" name="nomeMae">           
+        </div>
+        <div class="form-group"> 
+                <label for="nomePai">Nome do Pai:</label>
+                <input id="nomePai" type="text" name="nomePai">           
+        </div>
+     
+    </form>
+   
+  <div>
+        
+     <button onclick="cad()" class="btn btn-info">Cadastrar</button>
+    </div>
+  </div>
+  
+    
+</div>
+
+
+ <script>
+
+    //Obtem o valor do Sexo selecionado
+     function getRadioValor(name){
+        let rads = document.getElementsByName(name);
+   
+            for(var i = 0; i < rads.length; i++){
+    
+                if(rads[i].checked){
+                     return rads[i].value;
+                }
+   
+             }
+   
+            return null;
+     }
+
+    //Função de cadastro
+     function cad(){
+
+    //Obtem dados do formulário
+    let nome = document.getElementById('nome').value;
+    let  sexo = getRadioValor('group1');
+    let dateNasc = document.getElementById('dateNasc').value;
+    let timeNasc = document.getElementById('timeNasc').value;
+    let nomeMae = document.getElementById('nomeMae').value;
+    let nomePai = document.getElementById('nomePai').value;
+
+
+    let dados = {nome:nome, sexo:sexo, dateNasc: dateNasc, timeNasc: timeNasc, nomeMae: nomeMae, nomePai: nomePai}
+         
+            
+            myHeaders = {"Content-Type": "application/json"};
+
+             //Realiza a tentiva de login na rota
+            fetch('/recemNasc/cadastro',{method:'post',body:JSON.stringify(dados), headers : myHeaders }).then((response)=> {
+
+
+                //Obtem a resposta da rota 
+				response.json().then(function (data) {
+                    
+                        // Caso esteja tudo validado
+                        if(data.msg == 1){
+                            document.getElementById('form').reset();
+                            document.getElementById('msg').innerHTML = "Recem-Nascido cadastrado com sucesso!"
+                        }
+                        if(data.msg == 2){
+                            document.getElementById('form').reset();
+                            document.getElementById('msg').innerHTML = "Erro no cadastro!"
+                        }
+					
+				});
+			}).catch(function (err) {
+				console.error('Failed retrieving information', err);
+			});
+
+     }
+
+      $('#usuarios').addClass('active');
+ </script>
+
+
+
+
+<%- include('../footerLayout.ejs')%>

@@ -1,0 +1,44 @@
+
+<!-- Inclui o layout do cabeçário-->
+<%- include('../headerLayout.ejs')%>
+
+<p> <a href="/recemNasc/cadastro"> <i class="icon-plus-circled"></i>&ensp;Adicionar Novo Recém-Nascido</a> </p>           
+<div class="row">
+    <!-- Aqui é feito o loop e vai listando os usuários-->
+    
+        <table class="table table-striped">
+            <thead style="background:#2d3e50; color: whitesmoke">
+              <tr>
+                <th scope="col">DN</th>
+                <th scope="col">Nome</th>
+                <th scope="col">Mãe</th>
+                <th scope="col">Opções</th>
+              </tr>
+            </thead>
+            <tbody>
+       <% for(data of recensNasc){ %>
+              <tr>
+                <!-- <th scope="row">1</th> -->
+                <td><b><%= data.idRecemNasc %></b></td>
+                <td><%= data.nome %></td>
+                <td><%= data.nomeMae %></td>
+                <td><a href="/recemNasc/delete/<%=data.idRecemNasc%>">Deletar</a> ||
+                    <a href="/recemNasc/details/<%=data.idRecemNasc%>">Detalhes</a> </td>
+              </tr>
+       <% } %>      
+            </tbody>
+        </table>
+                                   
+    
+</div>
+
+<script>
+    $('#').addClass('active');
+</script>
+
+<!-- Inclui o layout de rodapé-->
+<%- include('../footerLayout.ejs')%>
+
+
+
+  

@@ -22,16 +22,21 @@
     "body-parser": "^1.18.3",
     "connect-ensure-login": "^0.1.1",
     "cookie-parser": "^1.4.3",
+    "cors": "^2.8.5",
     "cryptr": "^4.0.0",
     "ejs": "^2.6.1",
+    "event-stream": "^4.0.1",
     "express": "^4.16.4",
     "express-ejs-layouts": "^2.5.0",
     "express-session": "^1.15.6",
     "http-errors": "^1.7.1",
+    "moment": "^2.22.2",
     "morgan": "^1.9.1",
     "mssql": "^4.2.2",
-    "nodemon": "^1.18.5",
+    "mysql": "^2.16.0",
+    "nodemon": "^1.18.7",
     "passport": "^0.4.0",
-    "passport-local": "^1.0.0"
+    "passport-local": "^1.0.0",
+    "stats-lite": "^2.2.0"
   }
 }
