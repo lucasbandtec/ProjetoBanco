@@ -65,19 +65,20 @@ router.post('/cadastro', (req, res) => {
     var idIncubadora = req.body.idIncubadora;
 
 
-
+//Insere o recem nascido e faz o scope_identity para pegar o id do recem nascido que esta criando
     global.conn.request().query`insert into recemNasc values(${nome},${sexo},${dateNasc},${timeNasc},${nomeMae},${nomePai});SELECT SCOPE_IDENTITY() as idRecemNasc;`
         .then((result) => {
 
+            //configura o formato de data e hora 
             let date = moment().format('l');
             let time = moment().format('LTS');
-            
+            //insere na o recem nascido na incubadora e musa o status pra 1
             global.conn.request().query`insert into internacao values(${result.recordset[0].idRecemNasc},${idIncubadora},${date},${time});
                                         update incubadora set status = 1 where idIncubadora = ${idIncubadora}`
                 .then(() =>{
 
                     console.log(idIncubadora);
-
+                    //redireciona para cima onde fica as menssagens
                     res.redirect('/recemNasc?successCreate=true');
 
 
