@@ -1,6 +1,86 @@
+
 <!-- Inclui o layout do cabeçário-->
 <%- include('../headerLayout.ejs')%>
 
+	<div class="row">
+		<div class="detailModule col-lg-4 col-md-4 mb-12">
+
+			<div class="card" style="width: 18rem; height: 245px">
+					
+					<div class="card-body">
+					  <h5 class="card-title">Recém-Nascido</h5>
+					  <label for="nome">Identificação Recém-Nascido:</label>
+				<%=incubadora.idRecemNasc%> <br>
+				<label for="nome">Nome:</label>
+				<p><%=incubadora.nome%></p> 
+				<label for="nome">Nome da Mãe:</label>
+				<p><%=incubadora.nomeMae%></p>
+					 
+					</div>
+				  </div>
+		</div>
+		<div class="detailModule col-lg-4 col-md-4 mb-12">
+
+			<div class="card" style="width: 18rem; height: 245px">
+					
+					<div class="card-body">
+					  <h5 class="card-title">Internação</h5>
+					 
+				<label for="nome">Data:</label>
+				<p><%=incubadora.date%></p>
+				<label for="nome">Hora:</label>
+				<p><%=incubadora.time%></p>
+					 
+					</div>
+				  </div>
+		</div>
+		<div class="col-lg-4 col-md-4 mb-12 ">
+
+			<div class="card card " style="width: 18rem; height: 245px">
+					
+					<div class="card-body">
+					  <h5 class="card-title">Incubadora</h5>
+					 
+				<label for="nome">Identificação da incubadora:</label>
+				<%=incubadora.idIncubadora%>
+				<label for="nome">Descrição:</label>
+				<p id="descIncubadora"><%=incubadora.descIncubadora%></p>
+
+				 <a class="btn btn-primary"title="Nova Incubadora" data-toggle="modal" data-target="#exampleModalCenter">
+					 Alterar
+				</a>
+					 
+					</div>
+				  </div>
+		</div>
+	</div>
+	<hr>
+	<!-- Modal Structure -->
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Alteração de dados</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    
+                        <div class="form-group">
+                            <label for="desc">Descrição:</label>
+                            <input id="desc" type="text" name="desc">
+                        </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button onclick="alterar()" class="btn waves-effect waves-light azul "data-dismiss="modal">Alterar</button>
+                    <button type="button" class="btn waves-effect waves-light azul" data-dismiss="modal">Fechar</button>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
 	<!-- arrumar label da temperatura de % para ºC: -->
 	<style>
 		#temperatura .ldBar-label:after {
@@ -20,6 +100,7 @@
 	</div>
 
 	<br>
+	
 
 	
 
@@ -44,6 +125,7 @@
 		</div>
 	</div>
 
+	<% if(incubadora.status == 1){%>
 	<!--Calendários-->
 	<div class="row">
 		<!--Diário-->
@@ -62,8 +144,8 @@
 		</div>
 		
 	</div>
+	<hr>
 	
-
 	<div class="row">
 		<div class="col-lg-6 col-md-6 col-sm-6 col-6 mb-12">
 			<label for="">Temperatura Média </label>
@@ -100,17 +182,55 @@
 		</div>
 		
 		
-	</div>
+	</div><%}%>
 
-	<div>
-		<a class="btn waves-effect waves-light red" href="/incubadoras/delete/<%= incubadora.idIncubadora%>">Deletar Incubadora</a>
-	</div>
-	
+	<% if(incubadora.status == 0){%>
+		<div>
+			<a class="btn waves-effect waves-light red" href="/incubadoras/delete/<%= incubadora.idIncubadora%>">Deletar Incubadora</a>
+		</div>
+	<%}%>
+
+	<% if(incubadora.status == 1){%>
+		<div>
+			<a class="btn waves-effect waves-light green" href="/internacao/alta/<%= incubadora.idIncubadora%>">Dar Alta</a>
+		</div>
+	<%};%>
+
+
 	<!--Inclui código do ChartJs para gráficos-->
+	
 	<%- include('./graficos.ejs')%>
 
+	
 	 <!--Inclui código de estatisticas e calendário-->
-	<%- include('./estatisticas.ejs')%>
+	<%if(incubadora.status == 1){%>	
+		<%- include('./estatisticas.ejs')%>
+	<%}%>
 
 	<!-- Inclui o layout de rodapé-->
 	<%- include('../footerLayout.ejs')%>
+
+	<script>
+		 function alterar(){
+			let desc = document.getElementById('desc').value;
+		 	let dados = {descIncubadora: desc}
+           
+            myHeaders = {"Content-Type": "application/json"};
+
+             //Realiza a tentiva de login na rota
+            fetch('/incubadoras/edit/<%=incubadora.idIncubadora%>',{method:'post',body:JSON.stringify(dados), headers : myHeaders }).then((response)=> {
+					 //Obtem a resposta da rota 
+				response.json().then(function (data) {
+                    
+ 					document.getElementById('descIncubadora').innerHTML = data.descIncubadora;
+					
+				});
+               
+            
+			}).catch(function (err) {
+				console.error('Failed retrieving information', err);
+			});
+
+     }
+
+	</script>

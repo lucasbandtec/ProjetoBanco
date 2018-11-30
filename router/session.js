@@ -23,6 +23,14 @@ router.post('/login',
     res.redirect('/incubadoras');
   });
 
+   //Desloga do sistema
+router.get('/logout', (req, res)=>{
+  req.session.destroy(function (err) {
+    res.redirect('/login'); 
+  });
+
+})
+
   
 
 

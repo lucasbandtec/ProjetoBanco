@@ -4,8 +4,7 @@
     <div class="col-md-4">
     <h4>Cadastro de Usuários</h4>
     <hr>
-    <br>  
-    
+    <br>    
     <form id="form" >
             
              <div>
@@ -51,7 +50,7 @@
             
             myHeaders = {"Content-Type": "application/json"};
 
-             //Realiza a tentiva de login na rota, para ver se ja existe um igual
+             //Realiza a tentiva de login na rota
             fetch('/users/cadastro',{method:'post',body:JSON.stringify(dados), headers : myHeaders }).then((response)=> {
 
 

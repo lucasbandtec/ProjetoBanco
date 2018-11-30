@@ -1,62 +1,161 @@
+<!--Obtem data e hora atuais-->
+<% 
+   // Data atual	 
+	var atual = new Date();
+	var ano = atual.getFullYear();
+	var mes = atual.getMonth() + 1;
+  var dia = atual.getDate();
+  var data = ano+'-'+mes+'-'+dia;
 
+ var hora = atual.getHours();	
+var minutos = atual.getMinutes();
+
+if( hora < 10 && minutos < 10)
+    var time = '0'+hora+':'+'0'+minutos;
+
+if(minutos< 10 && hora >= 10)
+    var time = hora+':'+'0'+minutos;
+
+if(hora< 10 && minutos >= 10)
+    var time = '0'+hora+':'+minutos;
+
+if(hora >= 10 && minutos >= 10)
+    var time = hora+':'+minutos;
+%>
 
 
 
 <%- include('../headerLayout.ejs')%>
 
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-6">
     <h4>Cadastro de Recém-Nascidos</h4>
     <hr>
     <br>    
-    <form id="form" >
+    <form id="myForm" action="/recemNasc/cadastro" method="post" >
             
-             <div>
-                <span style="color : blue" id="msg"></span>
-           </div>
+             
           
          
         <div class="form-group">
-            <label for="nome">Nome:</label>
-            <input id="nome" type="text" name="nome">
+            <label for="nome">* Nome:</label>
+            <input id="nome" type="text" name="nome" required>
         </div>
         <div class="form-group">
-                <label for="group1">Sexo:</label>
+                <label for="group1">* Sexo:</label>
             
                 <label>
-                  <input name="group1" type="radio" checked value="f"/>
+                  <input name="group1" id="radioF" type="radio" checked value="f"/>
                   <span>F</span>
                 </label>
               
               
                 <label>
-                  <input name="group1" type="radio" value="m"/>
+                  <input name="group1" id="radioM" type="radio" value="m"/>
                   <span>M</span>
                 </label>
               
         </div>
         <div class="form-group"> 
-            <label for="date">Data Nascimento:</label>
-            <input id="dateNasc" type="date" name="date" value="2018-11-26">           
+            <label for="date">* Data Nascimento:</label>
+            <input id="dateNasc" type="date" name="date" value="<%=data%>" required>           
         </div>
         <div class="form-group"> 
-                <label for="time">Hora Nascimento:</label>
-                <input id="timeNasc" type="time" name="time" value="00:00">           
+                <label for="time">* Hora Nascimento:</label>
+                <input id="timeNasc" type="time" name="time" value="<%=time%>">           
         </div>
         <div class="form-group"> 
-                <label for="nomeMae">Nome do Mãe:</label>
-                <input id="nomeMae" type="text" name="nomeMae">           
+                <label for="nomeMae">* Nome do Mãe:</label>
+                <input id="nomeMae" type="text" name="nomeMae" required>           
         </div>
         <div class="form-group"> 
                 <label for="nomePai">Nome do Pai:</label>
                 <input id="nomePai" type="text" name="nomePai">           
         </div>
-     
-    </form>
+        <div class="form-group"> 
+                <input id="idIncubadora" type="hidden" name="idIncubadora">           
+        </div>
+                         
+
+
+         </form>
+
+         <a class="btn btn-primary"title="Nova Incubadora" data-toggle="modal" data-target="#exampleModalCenter">
+					 Selecionar Incubadora
+				</a>
+      
+        <!-- Modal Structure -->
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Selecione uma Incubadora para Concluir</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    
+                <div class="row">
+          <div class="col-md-12">
+           
+            <br>  
+        </div>
+        
+        <!-- Aqui é feito o loop e vai listando as incubadoras-->
+        <% for(data of incubadoras){ %>
+
+            <div class="col-lg-4 col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Incubadora
+                            <span class="float-right">
+                                <%= data.idIncubadora %>
+                            </span>
+                        </h4>
+                        <p class="card-text">
+                            
+                                
+                                <label>Descrição:</label>
+                               
+                              
+                                    <br />
+
+
+                                    <label>Status:</label>
+                                    
+                                            <b>vazia</b>
+
+                                         
+                                    <button onclick="cad('<%= data.idIncubadora %>')" data-dismiss="modal" class="btn waves-effect waves-light green float-right">Selecionar</button>
+                            
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+
+            <% } %>
+         </div>
+      
+                       
+
+                </div>
+                <div class="modal-footer">
+                    
+                    <button  class="btn waves-effect waves-light azul" data-dismiss="modal">Cancelar</button>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    
    
   <div>
         
-     <button onclick="cad()" class="btn btn-info">Cadastrar</button>
+    
     </div>
   </div>
   
@@ -64,65 +163,18 @@
 </div>
 
 
- <script>
+  <script>
+     function cad(idIncubadora){
 
-    //Obtem o valor do Sexo selecionado
-     function getRadioValor(name){
-        let rads = document.getElementsByName(name);
-   
-            for(var i = 0; i < rads.length; i++){
+        document.getElementById('idIncubadora').value = idIncubadora;
+        document.getElementById('myForm').submit();
+
+     }
     
-                if(rads[i].checked){
-                     return rads[i].value;
-                }
-   
-             }
-   
-            return null;
-     }
-
-    //Função de cadastro
-     function cad(){
-
-    //Obtem dados do formulário
-    let nome = document.getElementById('nome').value;
-    let  sexo = getRadioValor('group1');
-    let dateNasc = document.getElementById('dateNasc').value;
-    let timeNasc = document.getElementById('timeNasc').value;
-    let nomeMae = document.getElementById('nomeMae').value;
-    let nomePai = document.getElementById('nomePai').value;
 
 
-    let dados = {nome:nome, sexo:sexo, dateNasc: dateNasc, timeNasc: timeNasc, nomeMae: nomeMae, nomePai: nomePai}
-         
-            
-            myHeaders = {"Content-Type": "application/json"};
-
-             //Realiza a tentiva de login na rota
-            fetch('/recemNasc/cadastro',{method:'post',body:JSON.stringify(dados), headers : myHeaders }).then((response)=> {
-
-
-                //Obtem a resposta da rota 
-				response.json().then(function (data) {
-                    
-                        // Caso esteja tudo validado
-                        if(data.msg == 1){
-                            document.getElementById('form').reset();
-                            document.getElementById('msg').innerHTML = "Recem-Nascido cadastrado com sucesso!"
-                        }
-                        if(data.msg == 2){
-                            document.getElementById('form').reset();
-                            document.getElementById('msg').innerHTML = "Erro no cadastro!"
-                        }
-					
-				});
-			}).catch(function (err) {
-				console.error('Failed retrieving information', err);
-			});
-
-     }
-
-      $('#usuarios').addClass('active');
+    
+      $('#recemNasc').addClass('active');
  </script>
 
 

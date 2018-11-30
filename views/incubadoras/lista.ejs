@@ -1,6 +1,12 @@
 <!-- Inclui o layout do cabeçário-->
 <%- include('../headerLayout.ejs')%>
-
+   <% if(mensagem != null){%>
+        <div class="row">
+		    <div class="col-lg-12 col-md-12 mb-12" style="background:#81F7D8">
+             <span><%=mensagem%></span>
+            </div>
+        </div>
+    <%}%>
     <!-- BOTÃO E MODAL - ADICIONAR INCUBADORA: -->
     <div style="margin-bottom: 50px;" class="fixed-action-btn">
         <a class="btn-floating btn-large waves-effect waves-light azul" title="Nova Incubadora" data-toggle="modal" data-target="#exampleModalCenter">
@@ -18,7 +24,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form action="/incubadoras/cadastro" method="POST">
+                    <form action="/incubadoras/create" method="POST">
                         <div class="form-group">
                             <label for="desc">Descrição:</label>
                             <input type="text" name="desc">
@@ -48,23 +54,27 @@
                         </h4>
                         <p class="card-text">
                             <form action="/incubadoras/details/<%= data.idIncubadora %>" method="GET">
-                                <label>Descrição:</label>
-                                <%= data.descIncubadora %>
-                                    <br />
+                               
 
-
-                                    <label>Status:</label>
+    
+                                    
                                     <% if(data.status == 1){%>
-                                        <b>em uso</b>
+    
                                         <br />
 
                                         <label>Identificação Recém Nascido:</label>
-                                        12345
+                                        <%=data.idRecemNasc%>
+                                        <br />
+                                        <label>Nome:</label>
+                                        <%=data.nome%>
                                         <br />
                                        
                                         <%} else{%>
+                                            <label>Status:</label>
                                             <b>vazia</b>
                                             <%}%>
+                                           
+                                                
                                                 <button type="submit" class="btn waves-effect waves-light azul float-right">Detalhes ></button>
                             </form>
                         </p>

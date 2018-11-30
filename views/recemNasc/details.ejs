@@ -8,7 +8,7 @@
 
 	<div class="row">
 		<div class="col-lg-6 col-md-6 col-sm-6 col-6 mb-12">
-			<label for="">DN:</label>
+			<label for="">Id:</label>
 			<p><%=data.idRecemNasc%></p>
 
 			<label for="">Nome:</label>
@@ -33,11 +33,26 @@
 		
 		
 	</div>
+	<%if(internacao.length > 0){%>
+		<div>
+			<p>Paciente internado na incubadora número: <%=internacao[0].fkIncubadora%></p>
+		</div>
+	<%}else{%>
+		<div class="row">
 
-	<div>
-		<a class="btn waves-effect waves-light red" href="/recemNasc/internacao/<%= data.idRecemNasc%>">Internar</a>
-	</div>
-	
+		<div class="col-md-2">
+			<a class="btn waves-effect waves-light green" href="/internacao/<%= data.idRecemNasc%>">Internar</a>
+		</div>
+		<div class="col-md-2">
+				
+			<a class="btn waves-effect waves-light red" href="/recemNasc/delete/<%=data.idRecemNasc%>">Deletar</a>
+		</div>
+
+		</div>
+		
+		
+	<%}%>
+
 
 	<!-- Inclui o layout de rodapé-->
 	<%- include('../footerLayout.ejs')%>

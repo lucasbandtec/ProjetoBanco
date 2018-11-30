@@ -1,143 +1,156 @@
-
-    
+ 
  <script>
+	// data de internação
+	 let d = '<%=incubadora.date%>';
+	 var date = d.split("/");
+	 console.log(date);
+	 
+	 // Data atual	 
+	var atual = new Date();
+	var ano = atual.getFullYear();
+	var mes = atual.getMonth();
+	var dia = atual.getDate();
+	
     
     
-    //Obtem as estatisticas do dia selecionado no calendário
-    //--------------------------------------------------------------------------------------------------
-    function get_estatisticaDia(dia){
-        let dados = {dia: dia};
-            myHeaders = {"Content-Type": "application/json"};
-        fetch('/medicao/estatisticaDia/<%=incubadora.idIncubadora%>',{method:'post',body:JSON.stringify(dados), headers : myHeaders })
-        .then(function (response) {
-            response.json().then(function (data) {
+		//Obtem as estatisticas do dia selecionado no calendário
+		//--------------------------------------------------------------------------------------------------
+		function get_estatisticaDia(dia){
+			let dados = {dia: dia};
+			console.log(dados)
+				myHeaders = {"Content-Type": "application/json"};
+			fetch('/medicao/estatisticaDia/<%=incubadora.idIncubadora%>',{method:'post',body:JSON.stringify(dados), headers : myHeaders })
+			.then(function (response) {
+				response.json().then(function (data) {
 
-                document.getElementById('mediaTemp').innerHTML = data.mediaTemp;
-                document.getElementById('medianaTemp').innerHTML = data.medianaTemp;
-                document.getElementById('dvPdTemp').innerHTML = data.dvPdTemp;
-                document.getElementById('minTemp').innerHTML = data.minTemp;
-                document.getElementById('maxTemp').innerHTML = data.maxTemp;
+					document.getElementById('mediaTemp').innerHTML = data.mediaTemp;
+					document.getElementById('medianaTemp').innerHTML = data.medianaTemp;
+					document.getElementById('dvPdTemp').innerHTML = data.dvPdTemp;
+					document.getElementById('minTemp').innerHTML = data.minTemp;
+					document.getElementById('maxTemp').innerHTML = data.maxTemp;
 
-                document.getElementById('mediaUmid').innerHTML = data.mediaUmid;
-                document.getElementById('medianaUmid').innerHTML = data.medianaUmid;
-                document.getElementById('dvPdUmid').innerHTML = data.dvPdUmid;
-                document.getElementById('minUmid').innerHTML = data.minUmid;
-                document.getElementById('maxUmid').innerHTML = data.maxUmid;
-            });
-        }).catch(function (err) {
-            console.error('Failed retrieving information', err);
-        });
-    }
+					document.getElementById('mediaUmid').innerHTML = data.mediaUmid;
+					document.getElementById('medianaUmid').innerHTML = data.medianaUmid;
+					document.getElementById('dvPdUmid').innerHTML = data.dvPdUmid;
+					document.getElementById('minUmid').innerHTML = data.minUmid;
+					document.getElementById('maxUmid').innerHTML = data.maxUmid;
+				});
+			}).catch(function (err) {
+				console.error('Failed retrieving information', err);
+			});
+        }
 
-    // Obtem estatisca da semana selecionada no calendário
-    //-----------------------------------------------------------------------------------
+        // Obtem estatisca da semana selecionada no calendário
+		//-----------------------------------------------------------------------------------
 
-    function get_estatisticaSemana(week){
-        let dados = {semana: week};
-        console.log(week)
+		function get_estatisticaSemana(week){
+			let dados = {semana: week};
+			console.log(week)
 
-        myHeaders = {"Content-Type": "application/json"};
-        fetch('/medicao/estatisticaSemana/<%=incubadora.idIncubadora%>',{method:'post',body:JSON.stringify(dados), headers : myHeaders })
-        .then(function (response) {
+			myHeaders = {"Content-Type": "application/json"};
+			fetch('/medicao/estatisticaSemana/<%=incubadora.idIncubadora%>',{method:'post',body:JSON.stringify(dados), headers : myHeaders })
+			.then(function (response) {
 
-            response.json().then(function (data) {
+				response.json().then(function (data) {
 
-                document.getElementById('mediaTemp').innerHTML = data.mediaTemp;
-                document.getElementById('medianaTemp').innerHTML = data.medianaTemp;
-                document.getElementById('dvPdTemp').innerHTML = data.dvPdTemp;
-                document.getElementById('minTemp').innerHTML = data.minTemp;
-                document.getElementById('maxTemp').innerHTML = data.maxTemp;
+					document.getElementById('mediaTemp').innerHTML = data.mediaTemp;
+					document.getElementById('medianaTemp').innerHTML = data.medianaTemp;
+					document.getElementById('dvPdTemp').innerHTML = data.dvPdTemp;
+					document.getElementById('minTemp').innerHTML = data.minTemp;
+					document.getElementById('maxTemp').innerHTML = data.maxTemp;
 
-                document.getElementById('mediaUmid').innerHTML = data.mediaUmid;
-                document.getElementById('medianaUmid').innerHTML = data.medianaUmid;
-                document.getElementById('dvPdUmid').innerHTML = data.dvPdUmid;
-                document.getElementById('minUmid').innerHTML = data.minUmid;
-                document.getElementById('maxUmid').innerHTML = data.maxUmid;
-            });
-        }).catch(function (err) {
-            console.error('Failed retrieving information', err);
-        });
-    }
-    
-
-    function get_estatisticaMes(data){
-        console.log(data)
-        let dados = {mes: data };
-
-        myHeaders = {"Content-Type": "application/json"};
-        fetch('/medicao/estatisticaMes/<%=incubadora.idIncubadora%>',{method:'post',body:JSON.stringify(dados), headers : myHeaders })
-        .then(function (response) {
-
-            response.json().then(function (data) {
-
-                document.getElementById('mediaTemp').innerHTML = data.mediaTemp;
-                document.getElementById('medianaTemp').innerHTML = data.medianaTemp;
-                document.getElementById('dvPdTemp').innerHTML = data.dvPdTemp;
-                document.getElementById('minTemp').innerHTML = data.minTemp;
-                document.getElementById('maxTemp').innerHTML = data.maxTemp;
-
-                document.getElementById('mediaUmid').innerHTML = data.mediaUmid;
-                document.getElementById('medianaUmid').innerHTML = data.medianaUmid;
-                document.getElementById('dvPdUmid').innerHTML = data.dvPdUmid;
-                document.getElementById('minUmid').innerHTML = data.minUmid;
-                document.getElementById('maxUmid').innerHTML = data.maxUmid;
-            });
-        }).catch(function (err) {
-            console.error('Failed retrieving information', err);
-        });
-    }
-
-
-    
-    // Constroi calendário para seleção do dia
-    //-----------------------------------------------------------------------------------------------
-    $(function() {		
-    
-        $("#dia").datepicker({
-
-            dateFormat: 'dd/mm/yy',
-            dayNames: ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado','Domingo'],
-            dayNamesMin: ['D','S','T','Q','Q','S','S','D'],
-            dayNamesShort: ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb','Dom'],
-            monthNames: ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
-            monthNamesShort: ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'],
-
-            minDate: new Date(2018,01,01),
-            maxDate: new Date(2018,11,25),
-
-            showAnim:'slideDown',
-
-            numberOfMonths: 1,
-
-            showWeek: false,
-
-            showOn: "button",
-
-            buttonImage: "/images/calendar-flat.png",
-
-            buttonImageOnly: true,
-
-            firstDay: 1
-
-
-        });
-
-        $(function() {
-
-            $("#dia").datepicker("option", "onSelect",
-                
-            function(value, date){
-        let ano = date.selectedYear;
-
-        let mes = date.selectedMonth + 1;
-
-        let dia = date.selectedDay;
-
-        data = ano+'-'+mes+'-'+dia;
-    
-
-        get_estatisticaDia(data);
+					document.getElementById('mediaUmid').innerHTML = data.mediaUmid;
+					document.getElementById('medianaUmid').innerHTML = data.medianaUmid;
+					document.getElementById('dvPdUmid').innerHTML = data.dvPdUmid;
+					document.getElementById('minUmid').innerHTML = data.minUmid;
+					document.getElementById('maxUmid').innerHTML = data.maxUmid;
+				});
+			}).catch(function (err) {
+				console.error('Failed retrieving information', err);
+			});
+        }
         
+
+        function get_estatisticaMes(data){
+            console.log(data)
+			let dados = {mes: data };
+
+			myHeaders = {"Content-Type": "application/json"};
+			fetch('/medicao/estatisticaMes/<%=incubadora.idIncubadora%>',{method:'post',body:JSON.stringify(dados), headers : myHeaders })
+			.then(function (response) {
+
+				response.json().then(function (data) {
+
+					document.getElementById('mediaTemp').innerHTML = data.mediaTemp;
+					document.getElementById('medianaTemp').innerHTML = data.medianaTemp;
+					document.getElementById('dvPdTemp').innerHTML = data.dvPdTemp;
+					document.getElementById('minTemp').innerHTML = data.minTemp;
+					document.getElementById('maxTemp').innerHTML = data.maxTemp;
+
+					document.getElementById('mediaUmid').innerHTML = data.mediaUmid;
+					document.getElementById('medianaUmid').innerHTML = data.medianaUmid;
+					document.getElementById('dvPdUmid').innerHTML = data.dvPdUmid;
+					document.getElementById('minUmid').innerHTML = data.minUmid;
+					document.getElementById('maxUmid').innerHTML = data.maxUmid;
+				});
+			}).catch(function (err) {
+				console.error('Failed retrieving information', err);
+			});
+		}
+
+    
+        
+        // Constroi calendário para seleção do dia
+        //-----------------------------------------------------------------------------------------------
+        $(function() {		
+		
+            $("#dia").datepicker({
+
+                dateFormat: 'dd/mm/yy',
+                dayNames: ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado','Domingo'],
+                dayNamesMin: ['D','S','T','Q','Q','S','S','D'],
+                dayNamesShort: ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb','Dom'],
+                monthNames: ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
+                monthNamesShort: ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'],
+ 
+                minDate: new Date(date[2],date[1] - 1,date[0]),
+	            maxDate: new Date(ano,mes,dia),
+
+	            showAnim:'slideDown',
+
+	            numberOfMonths: 1,
+
+	            showWeek: false,
+
+	            showOn: "button",
+	
+	            buttonImage: "/images/calendar-flat.png",
+
+	            buttonImageOnly: true,
+	
+	            firstDay: 1
+
+
+            });
+
+            $(function() {
+
+                $("#dia").datepicker("option", "onSelect",
+                    
+                function(value, date){
+					document.getElementById('semana').value = '';
+					document.getElementById('mes').value = '';
+			let ano = date.selectedYear;
+
+			let mes = date.selectedMonth + 1;
+
+			let dia = date.selectedDay;
+
+			data = ano+'-'+mes+'-'+dia;
+					console.log(data);
+
+			get_estatisticaDia(data);
+			
 
 }
 
@@ -150,39 +163,41 @@
 
 // Constroi calendário para seleção da semana
 //-------------------------------------------------------------------------------
-$(function() {		
-    
+$(function() {	
+	
+
+		
 $("#semana").datepicker({
-orientation: 'top auto',
+    orientation: 'top auto',
 
-dateFormat: 'dd/mm/yy',
-    dayNames: ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado','Domingo'],
-    dayNamesMin: ['D','S','T','Q','Q','S','S','D'],
-    dayNamesShort: ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb','Dom'],
-    monthNames: ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
-    monthNamesShort: ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'],
+    dateFormat: 'dd/mm/yy',
+        dayNames: ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado','Domingo'],
+        dayNamesMin: ['D','S','T','Q','Q','S','S','D'],
+        dayNamesShort: ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb','Dom'],
+        monthNames: ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
+        monthNamesShort: ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'],
+	
+	
+	minDate: new Date(date[2],date[1] -1,date[0]),
+	maxDate: new Date(ano,mes,dia),
 
-// beforeShowDay: $.datepicker.noWeekends,
-minDate: new Date(2018,01,01),
-maxDate: new Date(2018,11,25),
-
-showAnim:'slideDown',
+	showAnim:'slideDown',
 
 
-numberOfMonths: 1,
+	numberOfMonths: 1,
 
-showWeek: true,
+	showWeek: true,
 
-showOn: "button",
+	showOn: "button",
+	
+	buttonImage: "/images/calendar-flat.png",
 
-buttonImage: "/images/calendar-flat.png",
+	buttonImageOnly: true,
+	
+	weekHeader: 'Sm',
 
-buttonImageOnly: true,
-
-weekHeader: 'Sm',
-
-firstDay: 1,
-
+    firstDay: 1,
+    
 
 });
 
@@ -190,24 +205,27 @@ firstDay: 1,
 
 $(function() {
 
-$("#semana").datepicker("option", "onSelect",
+	$("#semana").datepicker("option", "onSelect",
 
-    function(value, date){
-        
-        let week = $.datepicker.iso8601Week (
+		function(value, date){
 
-            new Date(date.selectedYear,
+			document.getElementById('semana').value = '';
+			document.getElementById('mes').value = '';
+			
+			let week = $.datepicker.iso8601Week (
 
-                    date.selectedMonth,
+				new Date(date.selectedYear,
 
-                    date.selectedDay));
+						date.selectedMonth,
 
-    $(this).val((week<10?'0':'')+week);
-    
-    get_estatisticaSemana(week)
+						date.selectedDay));
+
+		$(this).val((week<10?'0':'')+week);
+		
+		get_estatisticaSemana(week)
 
 
-     
+         
 
 }
 
@@ -221,59 +239,62 @@ $("#semana").datepicker("option", "onSelect",
 // Constroi calendário para seleção do mes
 //-------------------------------------------------------------------------------
 
-$(function() {		
-    
-        $("#mes").datepicker({
+ $(function() {		
+		
+            $("#mes").datepicker({
 
-            dateFormat: 'mm/yy',
-            dayNames: ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado','Domingo'],
-            dayNamesMin: ['D','S','T','Q','Q','S','S','D'],
-            dayNamesShort: ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb','Dom'],
-            monthNames: ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
-            monthNamesShort: ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'],
+                dateFormat: 'mm/yy',
+                dayNames: ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado','Domingo'],
+                dayNamesMin: ['D','S','T','Q','Q','S','S','D'],
+                dayNamesShort: ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb','Dom'],
+                monthNames: ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
+                monthNamesShort: ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'],
 
-               minDate: new Date(2018,01,01),
-            maxDate: new Date(2018,11,25),
-                
-             showOn: "button",
+                   minDate: new Date(date[2],date[1] - 1,date[0]),
+	            maxDate: new Date(ano,mes,dia),
+                    
+	             showOn: "button",
+	
+	             buttonImage: "/images/calendar-flat.png",
 
-             buttonImage: "/images/calendar-flat.png",
+                buttonImageOnly: true,
 
-            buttonImageOnly: true,
-
-            firstDay: 1,
+                firstDay: 1,
 
 
-        });
-    
-    $(function() {
-
-            $("#mes").datepicker("option", "onSelect",
-                
-            function(value, date){
-
-        let ano = date.selectedYear;
-
-        let mes = date.selectedMonth + 1;
-
-        let dia = date.selectedDay;
+            });
         
-        $(this).val(mes+'/'+ano);
+        $(function() {
 
-        let data = ano+'-'+mes+'-'+dia;
-    
+                $("#mes").datepicker("option", "onSelect",
+                    
+                function(value, date){
 
-        get_estatisticaMes(data);
-        
+					document.getElementById('semana').value = '';
+					document.getElementById('mes').value = '';
+
+			let ano = date.selectedYear;
+
+			let mes = date.selectedMonth + 1;
+
+            let dia = date.selectedDay;
+            
+            $(this).val(mes+'/'+ano);
+
+			let data = ano+'-'+mes+'-'+dia;
+		
+
+			get_estatisticaMes(data);
+			
 
 }
 
 );
 
 });
-       
+           
 
 });
 
 
-</script>
+ </script>

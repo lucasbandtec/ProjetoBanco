@@ -14,7 +14,7 @@ require('./router/auth')(passport);
 //----------------------------------------------------------
 
 // Faz o arquivo routes ficar disponível
-var indexRouter = require('./router/index');
+var indexRouter = require('./router/session');
 var usersRouter = require('./router/users');
 var incubadorasRouter = require('./router/incubadoras');
 var medicaoRouter = require('./router/medicao');

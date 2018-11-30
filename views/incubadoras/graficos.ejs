@@ -128,13 +128,14 @@
     var chartU = new Chart(contextU, configurationU);
     var timeU = 0;
     var randomUmid = Math.random() * 5;
-
+    var alertaTemp = true;
+    var alertaUmid = true;
 
 
     //Obtem as medições
     function get_data() {
 
-        fetch('/medicao').then(function (response) {
+        fetch('/medicao/<%=incubadora.idIncubadora%>',{method:'get'}).then(function (response) {
 
             response.json().then(function (data) {
 
@@ -162,6 +163,34 @@
 
                 chart.update();
                 chartU.update();
+                
+                // Alerta de temperaturas e umidade a cima da range
+                if(data.temperatura < 20 || data.temperatura > 36 && alertaTemp == true){
+                    var intervaloTemp = setInterval(()=>{
+                        $("#temperatura").fadeOut();
+                        $("#temperatura").fadeIn();
+                    },10);
+                    alertaTemp = false;
+                }
+                if(data.umidade < 30 || data.umidade > 70 && alertaUmid == true){
+                    
+                    var intervaloUmid = setInterval(()=>{
+                        $("#umidade").fadeOut();
+                        $("#umidade").fadeIn();
+                    },10)
+                    alertaUmid = false;
+                    
+                }
+                if(data.temperatura >= 20 && data.temperatura <= 36 && alertaTemp == false){
+                clearInterval(intervaloTemp)
+                    alertaTemp = true;
+
+                }
+                if(data.temperatura >= 30 && data.temperatura <= 70 && alertaUmid == false){
+                clearInterval(intervaloUmid)
+                    alertaUmid = true;
+
+                }
 
             });
         }).catch(function (err) {
@@ -178,6 +207,8 @@
     setInterval(() => {			
         get_data();
     }, 3000);
+
+    
 
 
 </script>

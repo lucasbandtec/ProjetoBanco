@@ -1,10 +1,18 @@
 <!-- Inclui o layout do cabeçário-->
 <%- include('../headerLayout.ejs')%>
 
-    
-   
+      
+
+        
+         
 
     <div class="row">
+          <div class="col-md-12">
+            <h4>Seleção de Incubadora</h4>
+            <hr>
+            <br>  
+        </div>
+        
         <!-- Aqui é feito o loop e vai listando as incubadoras-->
         <% for(data of incubadoras){ %>
 
@@ -17,8 +25,8 @@
                             </span>
                         </h4>
                         <p class="card-text">
-                            <form action="/recemNasc/internar/<%= data.idIncubadora %>" method="GET">
-                                <input type="text" name="idRecemNasc" value="<%= idRecemNasc %>" style="display: none">
+                            <form action="/internacao/cadastro/<%= data.idIncubadora%>" method="POST">
+                                
                                 <label>Descrição:</label>
                                 <%= data.descIncubadora %>
                                     <br />
@@ -27,19 +35,22 @@
                                     <label>Status:</label>
                                     
                                             <b>vazia</b>
-                                            
-                                    <button type="submit" class="btn waves-effect waves-light azul float-right">Selecionar</button>
+
+                                    <input type="hidden" id="idRecemNasc" name="idRecemNasc" value='<%= idRecemNasc%>'>        
+                                    <button type="submit" class="btn waves-effect waves-light green float-right">Selecionar</button>
                             </form>
                         </p>
                     </div>
                 </div>
             </div>
-
+            
 
             <% } %>
-    </div>
+         </div>
+      
 
     <script>
+        
         $('#').addClass('active');
     </script>
 

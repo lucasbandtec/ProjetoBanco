@@ -70,25 +70,27 @@ router.post('/cadastro', function (req, res) {
 
 });
 //-----------------------------------------------------------------------------------
+// GET obtem view de detalhe da incubadora selecionada
+
 router.get('/details/:id', function (req, res, next) {
 
     let id = req.params.id;
-
-    //faz a conexao global com o banco
-    global.conn.request().query`select * from incubadora where idIncubadora = ${id}`
   
-    .then(resultado => {
-
-        //Manda pra view details 
-      res.render('incubadoras/details', { incubadora: resultado.recordset[0]});
-      console.log( resultado.recordset[0])
+    global.conn.request().query`select CONVERT (varchar(10), inter.dateInternacao, 103) as date, CONVERT (varchar(10), timeInternacao,108) as time, * from incubadora as inc full join internacao as inter  on inc.idIncubadora = inter.fkIncubadora full join recemNasc as r on r.idRecemNasc = inter.fkRecemNasc where idIncubadora = ${id};
+    `
   
-    }).catch(err => {
-      // Se der algum erro imprime no console
-      console.log(err);
-    })
+      .then(resultado => {
   
-   
+  
+  
+        res.render('incubadoras/details', { incubadora: resultado.recordset[0] });
+  
+      }).catch(err => {
+        // Se der algum erro imprime no console
+        console.log(err);
+      })
+  
+  
   });
 //-----------------------------------------------------------------------------------------------------
 router.get('/delete/:id', (req,res) =>{
@@ -112,6 +114,33 @@ router.get('/delete/:id', (req,res) =>{
   
   
   //-----------------------------------------------------------------------------------
+  //Obtem view para alterar as informações da incubadora, no caso, a descrição.
+router.post('/edit/:id', function (req, res, next) {
+
+    let desc = req.body.descIncubadora;
+    let idIncubadora = req.params.id;
+  
+  
+  
+    global.conn.request().query`update incubadora set descIncubadora = ${desc} where idIncubadora = ${idIncubadora}`
+      .then(() => {
+        global.conn.request().query`select descIncubadora from incubadora where idIncubadora = ${idIncubadora}`
+          .then((resultado) => {
+  
+            res.json(resultado.recordset[0]);
+          }).catch(err => {
+  
+            // Se der algum erro imprime no console
+            console.log(err);
+          })
+  
+  
+      }).catch(err => {
+        // Se der algum erro imprime no console
+        console.log(err);
+      })
+  
+  });
   
   
 
